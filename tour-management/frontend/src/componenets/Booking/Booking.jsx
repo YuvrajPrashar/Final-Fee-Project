@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
 import "./booking.css";
 import { Form, FormGroup, ListGroup, ListGroupItem, Button } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { BASE_URL } from "../../utils/config";
 const Booking = ({ tour, avgRating }) => {
   const { price, reviews, title} = tour;
+  const {id} = useParams();
   const navigate = useNavigate();
   const {user} =useContext(AuthContext)
   const [booking, setBooking] = useState({
@@ -32,7 +33,7 @@ const Booking = ({ tour, avgRating }) => {
       if(!user || user===undefined || user===null){
         return alert('Please sign in')
       }
-      const res=await fetch(`${BASE_URL}/review`,{
+      const res = await fetch(`${BASE_URL}/booking/${id}`,{
         method:'post',
         headers:{
           'content-type':'application/json'
@@ -46,9 +47,9 @@ const Booking = ({ tour, avgRating }) => {
       }
       navigate('/thank-you')
     } catch (err) {
+      console.log(err);
       alert(err.message);
     }
-    
   };
 
   return (

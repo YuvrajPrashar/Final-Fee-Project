@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import "../styles/tour-details.css";
 import { Container, Row, Col, Form, ListGroup } from "reactstrap";
 import { useParams } from "react-router-dom";
-import tourData from "../assets/data/tours";
+
 import calculateAvgRating from "../utils/avgRating"; // Removed unnecessary "./"
 import avatar from "../assets/images/avatar.jpg";
 import Booking from "../componenets/Booking/Booking"; // Corrected the import path
@@ -33,9 +33,6 @@ const TourDetails = () => {
   } = tour;
   
   // Calculate the average rating
-  if (tour) {
-    return <div>Tour found.</div>;
-  }
   const { totalRating, avgRating } = calculateAvgRating(reviews);
 
   // Options for formatting the date
@@ -80,8 +77,8 @@ const TourDetails = () => {
     <>
       <section>
         <Container>
-          {/* {loading && <h4 className="text-center pt-5">Loading.....</h4>}
-          {error && <h4 className="text-center pt-5">{error}</h4>} */}
+          {loading && <h4 className="text-center pt-5">Loading.....</h4>}
+          {error && <h4 className="text-center pt-5">{error}</h4>}
           {!loading && !error && (
             <Row>
               <Col lg="8">
@@ -97,10 +94,10 @@ const TourDetails = () => {
                           style={{ color: "var(--secondary-color)" }}
                         ></i>
                         {avgRating === 0 ? null : avgRating}
-                        {totalRating === 0 ? (
+                        {(totalRating === 0) ? (
                           " (Not rated)"
                         ) : (
-                          <span>({reviews.length})</span>
+                          <span>{(reviews) && reviews.length}</span>
                         )}
                       </span>
 
@@ -131,7 +128,7 @@ const TourDetails = () => {
 
                   {/* Tour reviews */}
                   <div className="tour__reviews mt-4">
-                    <h4>Reviews ({reviews.length} reviews)</h4>
+                    <h4>Reviews {reviews?.length} reviews</h4>
                     <Form onSubmit={submitHandler}>
                       <div className="d-flex align-items-center gap-3 mb-4 rating__group">
                         {[1, 2, 3, 4, 5].map((rating) => (
@@ -161,7 +158,7 @@ const TourDetails = () => {
                     </Form>
 
                     <ListGroup className="user-reviews">
-                      {reviews?.map((review) => (
+                      {reviews?.map((review, index) => (
                         <div className="review-item" key={index}>
                           <img src={avatar} alt="" />
                           <div className="d-flex align-items-center justify-content-between">
